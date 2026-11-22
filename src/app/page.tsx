@@ -1,4 +1,6 @@
 import { Hero } from "@/components/sections/Hero";
+import { MenuSection } from "@/components/sections/MenuSection";
+import { MENU_ITEMS, FILTER_OPTIONS } from "@/data/menu";
 
 export default function Home() {
   return (
@@ -6,22 +8,11 @@ export default function Home() {
       {/* Semantic Hero Section */}
       <Hero />
 
+      {/* Semantic Menu Section (DEV-06) */}
+      <MenuSection items={MENU_ITEMS} filterOptions={FILTER_OPTIONS} />
+
       {/* Semantic Landmark Destination Placeholders (Ensures Valid Navigation Anchors) */}
       <div className="mx-auto max-w-5xl w-full px-4 sm:px-6 pb-20 space-y-8">
-        <section
-          id="menu"
-          tabIndex={-1}
-          className="rounded-2xl border border-border/60 bg-surface p-8 text-center"
-        >
-          <h2 className="font-display text-2xl font-semibold text-primary">
-            Artisanal Menu
-          </h2>
-          <p className="mt-2 text-sm text-secondary">
-            Curated espresso, pour-overs, cold-craft, and pastries will be
-            introduced in DEV-06 &amp; DEV-07.
-          </p>
-        </section>
-
         <section
           id="about"
           tabIndex={-1}

@@ -81,4 +81,5 @@ export interface MenuItem {
    * Supports rendering out-of-stock UI states without dynamic backend infrastructure.
    */
   readonly available?: boolean;
+
 }
