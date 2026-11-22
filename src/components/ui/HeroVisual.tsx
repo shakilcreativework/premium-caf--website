@@ -6,7 +6,7 @@ export function HeroVisual({ className }: HeroVisualProps) {
   return (
     <div
       aria-hidden="true"
-      className={`group relative flex aspect-[4/3] w-full max-w-md items-center justify-center sm:aspect-square lg:aspect-[4/5] ${
+      className={`group relative flex aspect-[4/3] w-full max-w-md items-center justify-center sm:aspect-square lg:aspect-[4/5] [perspective:1000px] ${
         className ?? ""
       }`}
     >
@@ -18,19 +18,20 @@ export function HeroVisual({ className }: HeroVisualProps) {
       {/* ---------------------------------------------------------------------- */}
       {/* Layer 1: Framing Stage with CSS 3D Perspective & Subtle Hover Depth    */}
       {/* ---------------------------------------------------------------------- */}
-      <div className="relative flex h-full w-full items-center justify-center rounded-3xl border border-border/60 bg-surface/40 p-6 shadow-md backdrop-blur-xs transition-all duration-700 ease-out group-hover:border-border group-hover:shadow-xl sm:p-8 dark:bg-surface/30">
+      <div className="relative flex h-full w-full items-center justify-center rounded-3xl border border-border/60 bg-surface/40 p-6 shadow-md backdrop-blur-xs transition-all duration-700 ease-out [transform-style:preserve-3d] [backface-visibility:hidden] motion-safe:group-hover:[transform:rotateX(6deg)_rotateY(-8deg)] motion-reduce:transform-none group-hover:border-border group-hover:shadow-xl sm:p-8 dark:bg-surface/30">
         {/* Subtle Inner Framing Gradient */}
         <div className="pointer-events-none absolute inset-0 rounded-3xl bg-radial from-transparent via-transparent to-surface-soft/10" />
 
         {/* ------------------------------------------------------------------ */}
         {/* Layer 2: Artisanal Ceramic Coffee Cup Composition (Vector SVG)     */}
         {/* ------------------------------------------------------------------ */}
-        <svg
-          viewBox="0 0 400 400"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="relative h-auto w-full max-w-[280px] drop-shadow-md transition-transform duration-700 ease-out transform-gpu group-hover:-translate-y-1 group-hover:scale-[1.02] sm:max-w-[330px] lg:max-w-[360px] motion-reduce:transform-none"
-        >
+        <div className="relative flex items-center justify-center [transform-style:preserve-3d] transition-transform duration-700 ease-out motion-safe:group-hover:[transform:translateZ(16px)] motion-reduce:transform-none">
+          <svg
+            viewBox="0 0 400 400"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="relative h-auto w-full max-w-[280px] drop-shadow-md sm:max-w-[330px] lg:max-w-[360px]"
+          >
           <defs>
             {/* Ceramic Saucer Surface Gradient */}
             <linearGradient id="saucerPlateGrad" x1="100" y1="280" x2="300" y2="350" gradientUnits="userSpaceOnUse">
@@ -266,6 +267,7 @@ export function HeroVisual({ className }: HeroVisualProps) {
             />
           </g>
         </svg>
+        </div>
       </div>
     </div>
   );

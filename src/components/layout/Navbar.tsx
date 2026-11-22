@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { MobileNav } from "@/components/layout/MobileNav";
+import { NavbarShell } from "@/components/layout/NavbarShell";
 
 interface NavItem {
   readonly label: string;
@@ -16,7 +17,7 @@ const NAV_ITEMS: readonly NavItem[] = [
 
 export function Navbar() {
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/80 backdrop-blur-md transition-colors duration-200">
+    <NavbarShell>
       {/* Skip to Main Content Link for Keyboard Accessibility */}
       <a
         href="#main-content"
@@ -66,6 +67,6 @@ export function Navbar() {
           <MobileNav navItems={NAV_ITEMS} />
         </div>
       </div>
-    </header>
+    </NavbarShell>
   );
 }

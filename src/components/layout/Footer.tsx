@@ -68,7 +68,7 @@ export function Footer() {
                 08:00 – 19:00
               </p>
               <p className="pt-1 text-xs text-secondary/80">
-                Slow Brew Tastings daily at 15:00
+                Tasting Concept daily at 15:00
               </p>
             </div>
           </div>
@@ -82,7 +82,7 @@ export function Footer() {
               <p>74 Artisan Way, Coffee Quarter</p>
               <p>Old Town District, EC1A 1BB</p>
               <p className="pt-2 text-xs text-secondary/80">
-                Walk-ins welcomed for quiet pauses
+                An unhurried retreat for quiet pauses
               </p>
             </div>
           </div>
