@@ -7,18 +7,18 @@ interface ProductCardProps {
 }
 
 /**
- * ProductCard — Premium, typography-first menu offering card (DEV-06.4 / DEV-06.5A).
+ * ProductCard — Premium, typography-first menu offering card (DEV-06.4 / DEV-06.5B).
  *
  * Designed with an editorial aesthetic for specialty café selections.
- * Enforces natural, unclipped text wrapping across all responsive viewports,
- * with dedicated narrow-mobile (320px) optimizations for metadata balancing
- * and title-price alignment.
+ * Enforces natural, unclipped text wrapping across all responsive viewports.
+ * Uses targeted max-[359px]: breakpoint qualifiers to refine narrow-mobile (320px–359px)
+ * metadata balance while strictly preserving the approved pre-fix layout at >= 360px.
  */
 export function ProductCard({ item, className }: ProductCardProps) {
   return (
     <article
       className={cn(
-        "group relative flex flex-col justify-between rounded-2xl border border-border/70 bg-surface/60 p-5 sm:p-7 shadow-xs backdrop-blur-xs transition-all duration-300",
+        "group relative flex flex-col justify-between rounded-2xl border border-border/70 bg-surface/60 p-6 max-[359px]:p-5 sm:p-7 shadow-xs backdrop-blur-xs transition-all duration-300",
         "hover:border-accent/40 hover:bg-surface hover:shadow-md",
         className
       )}
@@ -48,9 +48,9 @@ export function ProductCard({ item, className }: ProductCardProps) {
           )}
         </div>
 
-        {/* Product Heading & Price Lockup (Context-aware wrapping for narrow viewports) */}
-        <div className="mt-3 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
-          <h3 className="font-display text-xl sm:text-2xl font-bold tracking-tight text-primary leading-snug">
+        {/* Product Heading & Price Lockup */}
+        <div className="mt-3 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-4">
+          <h3 className="font-display text-xl sm:text-2xl font-bold tracking-tight text-primary max-[359px]:leading-snug">
             {item.name}
           </h3>
           <span className="shrink-0 font-display text-lg sm:text-xl font-bold text-accent">
@@ -59,15 +59,15 @@ export function ProductCard({ item, className }: ProductCardProps) {
         </div>
 
         {/* Full, Unclipped Sensory Description */}
-        <p className="mt-2.5 font-body text-sm leading-relaxed text-secondary">
+        <p className="mt-3 max-[359px]:mt-2.5 font-body text-sm leading-relaxed text-secondary">
           {item.description}
         </p>
       </div>
 
-      {/* Terroir / Origin and Specialty Tag Metadata (Context-aware column-on-mobile layout) */}
+      {/* Terroir / Origin and Specialty Tag Metadata */}
       {(item.origin || (item.tags && item.tags.length > 0)) && (
-        <div className="mt-5 sm:mt-6 pt-3.5 sm:pt-4 border-t border-border/40 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-2 text-xs">
-          {item.origin ? (
+        <div className="mt-6 max-[359px]:mt-5 pt-4 max-[359px]:pt-3.5 border-t border-border/40 flex flex-wrap items-center justify-between gap-2 max-[359px]:flex-col max-[359px]:items-start max-[359px]:gap-2.5 text-xs">
+          {item.origin && (
             <div className="inline-flex items-center gap-1.5 font-body text-secondary/90">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -84,14 +84,12 @@ export function ProductCard({ item, className }: ProductCardProps) {
                 <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
                 <path d="M2 12h20" />
               </svg>
-              <span className="leading-tight">{item.origin}</span>
+              <span>{item.origin}</span>
             </div>
-          ) : (
-            <div className="hidden sm:block" aria-hidden="true" />
           )}
 
           {item.tags && item.tags.length > 0 && (
-            <div className="flex flex-wrap items-center gap-1.5">
+            <div className="flex flex-wrap items-center gap-1.5 lg:ml-auto">
               {item.tags.map((tag) => (
                 <span
                   key={tag}
