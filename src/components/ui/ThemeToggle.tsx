@@ -11,7 +11,7 @@ const STORAGE_KEY = "aurel-bean-theme";
 /* React 19 Hydration-Safe Mount Hook via useSyncExternalStore                */
 /* -------------------------------------------------------------------------- */
 
-const emptySubscribe = () => () => {};
+const emptySubscribe = () => () => { };
 
 export function useMounted(): boolean {
   return useSyncExternalStore(
@@ -198,10 +198,10 @@ const THEME_OPTIONS: readonly {
   readonly label: string;
   readonly icon: typeof SunIcon;
 }[] = [
-  { mode: "light", label: "Light", icon: SunIcon },
-  { mode: "dark", label: "Dark", icon: MoonIcon },
-  { mode: "system", label: "System", icon: MonitorIcon },
-];
+    { mode: "light", label: "Light", icon: SunIcon },
+    { mode: "dark", label: "Dark", icon: MoonIcon },
+    { mode: "system", label: "System", icon: MonitorIcon },
+  ];
 
 /* -------------------------------------------------------------------------- */
 /* Main ThemeToggle Component                                                 */
@@ -214,6 +214,24 @@ export function ThemeToggle() {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Focus selected or first item when menu opens
+  useEffect(() => {
+    if (isOpen && menuRef.current) {
+      const selectedItem = menuRef.current.querySelector<HTMLButtonElement>(
+        '[aria-checked="true"]'
+      );
+      if (selectedItem) {
+        selectedItem.focus();
+      } else {
+        const firstItem = menuRef.current.querySelector<HTMLButtonElement>(
+          '[role="menuitemradio"]'
+        );
+        firstItem?.focus();
+      }
+    }
+  }, [isOpen]);
 
   // Close dropdown on click outside or Escape key
   useEffect(() => {
@@ -246,6 +264,33 @@ export function ThemeToggle() {
     };
   }, [isOpen]);
 
+  // Keyboard navigation within the theme options menu (ArrowDown, ArrowUp, Home, End)
+  const handleMenuKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const items = menuRef.current?.querySelectorAll<HTMLButtonElement>(
+      '[role="menuitemradio"]'
+    );
+    if (!items || items.length === 0) return;
+
+    const itemsArray = Array.from(items);
+    const currentIndex = itemsArray.indexOf(document.activeElement as HTMLButtonElement);
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      const nextIndex = (currentIndex + 1) % itemsArray.length;
+      itemsArray[nextIndex]?.focus();
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      const prevIndex = (currentIndex - 1 + itemsArray.length) % itemsArray.length;
+      itemsArray[prevIndex]?.focus();
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      itemsArray[0]?.focus();
+    } else if (e.key === "End") {
+      e.preventDefault();
+      itemsArray[itemsArray.length - 1]?.focus();
+    }
+  };
+
   const handleSelect = (mode: ThemeMode) => {
     setAppTheme(mode);
     setIsOpen(false);
@@ -256,10 +301,10 @@ export function ThemeToggle() {
   const CurrentIcon = !mounted
     ? MonitorIcon
     : theme === "light"
-    ? SunIcon
-    : theme === "dark"
-    ? MoonIcon
-    : MonitorIcon;
+      ? SunIcon
+      : theme === "dark"
+        ? MoonIcon
+        : MonitorIcon;
 
   return (
     <div ref={containerRef} className="relative inline-block text-left">
@@ -274,6 +319,7 @@ export function ThemeToggle() {
           "relative inline-flex h-9 w-9 items-center justify-center rounded-full border border-border/60 bg-surface/80 text-secondary transition-colors duration-150",
           "hover:bg-surface hover:text-primary active:scale-95",
           "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring",
+          "before:absolute before:-inset-1.5 before:content-['']", // Expanded >= 44x44px touch hit area for mobile
           isOpen && "bg-surface text-primary border-border"
         )}
       >
@@ -282,9 +328,11 @@ export function ThemeToggle() {
 
       {isOpen && (
         <div
+          ref={menuRef}
           role="menu"
           aria-orientation="vertical"
           aria-label="Theme options"
+          onKeyDown={handleMenuKeyDown}
           className={cn(
             "absolute right-0 top-full mt-2 w-36 rounded-xl border border-border/80 bg-surface p-1.5 shadow-xl z-50 backdrop-blur-md",
             "motion-safe:animate-in motion-safe:fade-in-0 motion-safe:zoom-in-95",
@@ -301,9 +349,10 @@ export function ThemeToggle() {
                 type="button"
                 role="menuitemradio"
                 aria-checked={isSelected}
+                tabIndex={isSelected ? 0 : -1}
                 onClick={() => handleSelect(option.mode)}
                 className={cn(
-                  "flex w-full items-center justify-between gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors",
+                  "flex w-full items-center justify-between gap-2.5 rounded-lg px-2.5 py-2 text-xs font-medium transition-colors",
                   "focus-visible:outline-2 focus-visible:outline-focus-ring",
                   isSelected
                     ? "bg-surface-soft/60 text-primary font-semibold"

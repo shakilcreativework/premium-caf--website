@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { MobileNav } from "@/components/layout/MobileNav";
 
 interface NavItem {
   readonly label: string;
@@ -53,7 +54,7 @@ export function Navbar() {
         </nav>
 
         {/* Header Action Area */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-3">
           <ThemeToggle />
           <a
             href="#menu"
@@ -61,6 +62,8 @@ export function Navbar() {
           >
             Explore Menu
           </a>
+          {/* Mobile Hamburger Navigation Trigger & Drawer */}
+          <MobileNav navItems={NAV_ITEMS} />
         </div>
       </div>
     </header>
