@@ -3,7 +3,9 @@
 import { useState } from "react";
 import type { MenuItem, CategoryFilterOption, CategoryFilterId } from "@/types/menu";
 import { CategoryFilter } from "@/components/ui/CategoryFilter";
-import { cn, formatPrice } from "@/lib/utils";
+import { ProductCard } from "@/components/ui/ProductCard";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { cn } from "@/lib/utils";
 
 interface MenuSectionProps {
   readonly items: readonly MenuItem[];
@@ -13,10 +15,10 @@ interface MenuSectionProps {
 }
 
 /**
- * MenuSection — Semantic interactive café menu presentation shell (DEV-06.3).
+ * MenuSection — Semantic interactive café menu presentation (DEV-06.4).
  *
  * Houses the active category filtering state, CategoryFilter controls,
- * live polite result counter, and responsive offering layout.
+ * live polite result counter, responsive ProductCard grid, and EmptyState fallback.
  */
 export function MenuSection({
   items,
@@ -107,46 +109,20 @@ export function MenuSection({
           </p>
         </div>
 
-        {/* Intermediate Restrained Non-Interactive Result Preview (DEV-06.3) */}
-        {/* Replaced by full interactive <ProductCard /> and <EmptyState /> in DEV-06.4 */}
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {visibleItems.map((item) => (
-            <div
-              key={item.id}
-              className="group rounded-2xl border border-border/70 bg-surface/50 p-6 backdrop-blur-xs transition-colors duration-200 flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-body text-[11px] font-semibold uppercase tracking-wider text-accent">
-                    {item.category}
-                  </span>
-                  {item.featured && (
-                    <span className="rounded-full bg-accent/15 px-2.5 py-0.5 text-[10px] font-semibold text-accent">
-                      Signature
-                    </span>
-                  )}
-                </div>
-
-                <h3 className="mt-3 font-display text-xl font-bold tracking-tight text-primary">
-                  {item.name}
-                </h3>
-
-                <p className="mt-2 font-body text-xs sm:text-sm leading-relaxed text-secondary line-clamp-2">
-                  {item.description}
-                </p>
-              </div>
-
-              <div className="mt-6 pt-4 border-t border-border/50 flex items-center justify-between text-xs">
-                <span className="font-body text-secondary/80 truncate max-w-[60%]">
-                  {item.origin ?? "Artisan Selection"}
-                </span>
-                <span className="font-display text-base font-bold text-accent">
-                  {formatPrice(item.price, item.currency)}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
+        {/* Responsive Product Card Grid (DEV-06.4) */}
+        {visibleItems.length > 0 ? (
+          <div className="mt-8 sm:mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {visibleItems.map((item) => (
+              <ProductCard key={item.id} item={item} />
+            ))}
+          </div>
+        ) : (
+          <EmptyState
+            activeFilter={activeOption?.label ?? activeFilter}
+            onReset={() => setActiveFilter("all")}
+            className="mt-8 sm:mt-10 max-w-md mx-auto"
+          />
+        )}
       </div>
     </section>
   );
