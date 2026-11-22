@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 interface NavItem {
   readonly label: string;
@@ -53,6 +54,7 @@ export function Navbar() {
 
         {/* Header Action Area */}
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           <a
             href="#menu"
             className="hidden sm:inline-flex items-center justify-center rounded-full bg-accent px-4 py-2 text-xs sm:text-sm font-medium text-on-accent transition-colors hover:bg-accent/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"

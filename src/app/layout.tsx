@@ -22,12 +22,18 @@ export const metadata: Metadata = {
     "Experience artisanal coffee, crafted seasonal brews, and tranquil slow rituals in an atmosphere designed for quiet luxury.",
 };
 
+const THEME_SCRIPT = `(function(){try{var s=localStorage.getItem('aurel-bean-theme');var d=s==='dark'||(!s&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d){document.documentElement.classList.add('dark')}else{document.documentElement.classList.remove('dark')}}catch(e){}})();`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
       className={`${fraunces.variable} ${manrope.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body
         className="min-h-full flex flex-col bg-background text-primary"
         suppressHydrationWarning
