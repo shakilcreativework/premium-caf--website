@@ -20,6 +20,20 @@ export const metadata: Metadata = {
   title: "Aurel & Bean — Artisanal Coffee & Slow Rituals",
   description:
     "Experience artisanal coffee, crafted seasonal brews, and tranquil slow rituals in an atmosphere designed for quiet luxury.",
+  openGraph: {
+    title: "Aurel & Bean — Artisanal Coffee & Slow Rituals",
+    description:
+      "Experience artisanal coffee, crafted seasonal brews, and tranquil slow rituals in an atmosphere designed for quiet luxury.",
+    siteName: "Aurel & Bean",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Aurel & Bean — Artisanal Coffee & Slow Rituals",
+    description:
+      "Experience artisanal coffee, crafted seasonal brews, and tranquil slow rituals in an atmosphere designed for quiet luxury.",
+  },
 };
 
 const THEME_SCRIPT = `(function(){try{var s=localStorage.getItem('aurel-bean-theme');var d=s==='dark'||(!s&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d){document.documentElement.classList.add('dark')}else{document.documentElement.classList.remove('dark')}}catch(e){}})();`;

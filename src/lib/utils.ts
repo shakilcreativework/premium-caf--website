@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import type { MenuItem, CategoryFilterOption, CategoryFilterId } from '@/types/menu';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -39,4 +40,55 @@ export function formatPrice(
     // Prevents displaying misleading fallback prices such as 'INVALID 4.85'
     return '--';
   }
+}
+
+/**
+ * Filter café menu items by category (DEV-09.3).
+ *
+ * Implements the core production menu filtering contract:
+ * - When category is 'all', returns the full items collection.
+ * - When category is a specific ProductCategory, returns strictly items matching that category.
+ * - When category is unrecognised, returns an empty array safely without throwing.
+ * - Preserves dataset ordering and avoids array mutation.
+ *
+ * @param items - Readonly collection of menu items.
+ * @param category - Active category filter identifier.
+ * @returns Filtered array of menu items.
+ */
+export function filterMenuItems(
+  items: readonly MenuItem[],
+  category: CategoryFilterId
+): readonly MenuItem[] {
+  if (category === 'all') {
+    return items;
+  }
+  return items.filter((item) => item.category === category);
+}
+
+/**
+ * Derive exact item counts for each category filter option from the dataset (DEV-09.3).
+ *
+ * Implements the core production count derivation contract:
+ * - 'all' option receives the total item count.
+ * - Individual category options receive the count of items belonging to that category.
+ * - Operates safely on empty datasets.
+ *
+ * @param items - Readonly collection of menu items.
+ * @param filterOptions - Configured filter options list.
+ * @returns Record mapping each CategoryFilterId to its integer count.
+ */
+export function deriveCategoryCounts(
+  items: readonly MenuItem[],
+  filterOptions: readonly CategoryFilterOption[]
+): Record<CategoryFilterId, number> {
+  return filterOptions.reduce<Record<CategoryFilterId, number>>(
+    (acc, opt) => {
+      acc[opt.id] =
+        opt.id === 'all'
+          ? items.length
+          : items.filter((item) => item.category === opt.id).length;
+      return acc;
+    },
+    {} as Record<CategoryFilterId, number>
+  );
 }

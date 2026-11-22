@@ -5,7 +5,7 @@ import type { MenuItem, CategoryFilterOption, CategoryFilterId } from "@/types/m
 import { CategoryFilter } from "@/components/ui/CategoryFilter";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { cn } from "@/lib/utils";
+import { cn, filterMenuItems, deriveCategoryCounts } from "@/lib/utils";
 
 interface MenuSectionProps {
   readonly items: readonly MenuItem[];
@@ -29,23 +29,11 @@ export function MenuSection({
   // Client-side category filtering state
   const [activeFilter, setActiveFilter] = useState<CategoryFilterId>(initialFilter);
 
-  // Derive visible products directly from active filter without premature useMemo
-  const visibleItems =
-    activeFilter === "all"
-      ? items
-      : items.filter((item) => item.category === activeFilter);
+  // Derive visible products directly from active filter via pure production utility (DEV-09.3)
+  const visibleItems = filterMenuItems(items, activeFilter);
 
-  // Derive exact item counts per filter option from the actual dataset
-  const categoryCounts = filterOptions.reduce<Record<CategoryFilterId, number>>(
-    (acc, opt) => {
-      acc[opt.id] =
-        opt.id === "all"
-          ? items.length
-          : items.filter((item) => item.category === opt.id).length;
-      return acc;
-    },
-    {} as Record<CategoryFilterId, number>
-  );
+  // Derive exact item counts per filter option from the actual dataset via pure production utility (DEV-09.3)
+  const categoryCounts = deriveCategoryCounts(items, filterOptions);
 
   const activeOption = filterOptions.find((opt) => opt.id === activeFilter);
 
